@@ -116,8 +116,7 @@ export function QuoteForm() {
     setIsSubmitting(true)
     setSubmitError(null)
 
-    const leadConnectorUrl = "https://services.leadconnectorhq.com/hooks/i7CCGVZUWTeOXat1IHdu/webhook-trigger/2fa6827b-68f1-4d28-94d9-7b3c53202f7c"
-    const zapierUrl = "https://hooks.zapier.com/hooks/catch/24750736/4y2c0hj/"
+    const leadConnectorUrl = "https://services.leadconnectorhq.com/hooks/XucZS735rmKlbQTCy59O/webhook-trigger/098f1338-837a-4232-a37b-ba5abd1fa2f0"
 
     const payload = {
       gateType: formData.gateType === "side-gate" ? "Side Gate" : "RV Gate / Double Door",
@@ -135,17 +134,6 @@ export function QuoteForm() {
       })
     } catch (err) {
       console.log("[v0] LeadConnector webhook error:", err)
-    }
-
-    try {
-      await fetch(zapierUrl, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      })
-    } catch (err) {
-      console.log("[v0] Zapier webhook error:", err)
     }
 
     trackFBEvent("Lead", {
