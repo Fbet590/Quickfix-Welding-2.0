@@ -116,8 +116,6 @@ export function QuoteForm() {
     setIsSubmitting(true)
     setSubmitError(null)
 
-    const leadConnectorUrl = "https://services.leadconnectorhq.com/hooks/XucZS735rmKlbQTCy59O/webhook-trigger/098f1338-837a-4232-a37b-ba5abd1fa2f0"
-
     const payload = {
       gateType: formData.gateType === "side-gate" ? "Side Gate" : "RV Gate / Double Door",
       name: formData.name,
@@ -127,13 +125,16 @@ export function QuoteForm() {
     }
 
     try {
-      await fetch(leadConnectorUrl, {
+      const res = await fetch("/api/submit-lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       })
+      if (!res.ok) {
+        console.log("[v0] Submit lead API error:", res.status)
+      }
     } catch (err) {
-      console.log("[v0] LeadConnector webhook error:", err)
+      console.log("[v0] Submit lead fetch error:", err)
     }
 
     trackFBEvent("Lead", {
