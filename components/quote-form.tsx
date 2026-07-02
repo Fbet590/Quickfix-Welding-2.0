@@ -116,9 +116,6 @@ export function QuoteForm() {
     setIsSubmitting(true)
     setSubmitError(null)
 
-    const leadConnectorUrl = "https://services.leadconnectorhq.com/hooks/i7CCGVZUWTeOXat1IHdu/webhook-trigger/2fa6827b-68f1-4d28-94d9-7b3c53202f7c"
-    const zapierUrl = "https://hooks.zapier.com/hooks/catch/24750736/4y2c0hj/"
-
     const payload = {
       gateType: formData.gateType === "side-gate" ? "Side Gate" : "RV Gate / Double Door",
       name: formData.name,
@@ -128,24 +125,16 @@ export function QuoteForm() {
     }
 
     try {
-      await fetch(leadConnectorUrl, {
+      const res = await fetch("/api/submit-lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       })
+      if (!res.ok) {
+        console.log("[v0] Submit lead API error:", res.status)
+      }
     } catch (err) {
-      console.log("[v0] LeadConnector webhook error:", err)
-    }
-
-    try {
-      await fetch(zapierUrl, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      })
-    } catch (err) {
-      console.log("[v0] Zapier webhook error:", err)
+      console.log("[v0] Submit lead fetch error:", err)
     }
 
     trackFBEvent("Lead", {
