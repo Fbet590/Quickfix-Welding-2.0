@@ -4,7 +4,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
 
   const leadConnectorUrl =
-    "https://services.leadconnectorhq.com/hooks/XucZS735rmKlbQTCy59O/webhook-trigger/098f1338-837a-4232-a37b-ba5abd1fa2f0"
+    "https://services.leadconnectorhq.com/hooks/XucZS735rmKlbQTCy59O/webhook-trigger/e0bb1155-91cc-4757-8f6b-22ef96c7cc83"
 
   // Split name into first/last for GHL contact mapping
   const nameParts = (body.name || "").trim().split(" ")
@@ -12,15 +12,12 @@ export async function POST(req: NextRequest) {
   const lastName = nameParts.slice(1).join(" ") || ""
 
   const payload = {
-    // Standard GHL field names
     firstName,
     lastName,
     email: body.email,
     phone: body.phone,
-    // Custom fields
     gateType: body.gateType,
     submittedAt: body.submittedAt,
-    // Full name as fallback
     name: body.name,
     source: "Quickfix Welding Landing Page",
   }
@@ -30,7 +27,7 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json",
+        Accept: "application/json",
       },
       body: JSON.stringify(payload),
     })
