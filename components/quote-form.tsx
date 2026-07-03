@@ -92,6 +92,7 @@ export function QuoteForm() {
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [deliveryRef, setDeliveryRef] = useState<string | null>(null)
   const [errors, setErrors] = useState<{ email?: string; phone?: string }>({})
 
   const validateEmail = (email: string): boolean => {
@@ -130,11 +131,29 @@ export function QuoteForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       })
-      if (!res.ok) {
-        console.log("[v0] Submit lead API error:", res.status)
+      const data = await res.json().catch(() => null)
+      console.log("[v0] Submit lead API response:", res.status, data)
+
+      if (res.ok && data?.success) {
+        // Try to surface the GHL reference id if present
+        let ref: string | null = null
+        try {
+          const ghl = data.ghlResponse ? JSON.parse(data.ghlResponse) : null
+          ref = ghl?.id ?? null
+        } catch {
+          ref = null
+        }
+        setDeliveryRef(ref)
+      } else {
+        setSubmitError(
+          "We couldn't submit your request just now. Please call or text us and we'll take care of you right away."
+        )
       }
     } catch (err) {
       console.log("[v0] Submit lead fetch error:", err)
+      setSubmitError(
+        "We couldn't submit your request just now. Please call or text us and we'll take care of you right away."
+      )
     }
 
     trackFBEvent("Lead", {
@@ -193,6 +212,11 @@ export function QuoteForm() {
             <p className="text-muted-foreground text-lg">
               We&apos;ve received your request and will contact you within 24 hours to discuss your project.
             </p>
+            {deliveryRef && (
+              <p className="text-muted-foreground/60 text-xs mt-4">
+                Reference: {deliveryRef}
+              </p>
+            )}
           </Card>
         </div>
       </section>
