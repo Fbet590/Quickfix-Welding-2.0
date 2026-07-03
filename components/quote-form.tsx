@@ -92,6 +92,7 @@ export function QuoteForm() {
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [debugInfo, setDebugInfo] = useState<string | null>(null)
   const [errors, setErrors] = useState<{ email?: string; phone?: string }>({})
 
   const validateEmail = (email: string): boolean => {
@@ -142,6 +143,7 @@ export function QuoteForm() {
     }
 
     let delivered = false
+    const debugLines: string[] = []
 
     // Primary: server-side route (avoids CORS)
     try {
@@ -150,11 +152,20 @@ export function QuoteForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       })
-      const data = await res.json().catch(() => null)
+      const rawText = await res.text()
+      let data: any = null
+      try {
+        data = JSON.parse(rawText)
+      } catch {
+        data = null
+      }
+      debugLines.push(`Server route: HTTP ${res.status}`)
+      debugLines.push(`Server route body: ${rawText.slice(0, 300)}`)
       if (res.ok && data?.success) {
         delivered = true
       }
     } catch (err) {
+      debugLines.push(`Server route error: ${String(err)}`)
       console.log("[v0] Submit lead server route error:", err)
     }
 
@@ -167,11 +178,15 @@ export function QuoteForm() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(directPayload),
         })
+        debugLines.push("Direct fallback: request sent (no-cors, response opaque)")
         delivered = true
       } catch (err) {
+        debugLines.push(`Direct fallback error: ${String(err)}`)
         console.log("[v0] Submit lead direct fallback error:", err)
       }
     }
+
+    setDebugInfo(debugLines.join(" | "))
 
     if (!delivered) {
       setSubmitError(
@@ -235,6 +250,11 @@ export function QuoteForm() {
             <p className="text-muted-foreground text-lg">
               We&apos;ve received your request and will contact you within 24 hours to discuss your project.
             </p>
+            {debugInfo && (
+              <p className="mt-6 text-left text-[11px] leading-relaxed text-muted-foreground/60 break-words font-mono border-t border-border pt-4">
+                {debugInfo}
+              </p>
+            )}
           </Card>
         </div>
       </section>
