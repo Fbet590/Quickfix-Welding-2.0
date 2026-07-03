@@ -92,7 +92,6 @@ export function QuoteForm() {
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  const [deliveryRef, setDeliveryRef] = useState<string | null>(null)
   const [errors, setErrors] = useState<{ email?: string; phone?: string }>({})
 
   const validateEmail = (email: string): boolean => {
@@ -123,73 +122,6 @@ export function QuoteForm() {
       email: formData.email,
       phone: formData.phone,
       submittedAt: new Date().toISOString(),
-    }
-
-    // Direct GHL webhook URL — used as a guaranteed client-side fallback
-    const leadConnectorUrl =
-      "https://services.leadconnectorhq.com/hooks/XucZS735rmKlbQTCy59O/webhook-trigger/098f1338-837a-4232-a37b-ba5abd1fa2f0"
-
-    // Split name for standard GHL contact field mapping
-    const nameParts = payload.name.trim().split(" ")
-    const directPayload = {
-      firstName: nameParts[0] || "",
-      lastName: nameParts.slice(1).join(" ") || "",
-      email: payload.email,
-      phone: payload.phone,
-      name: payload.name,
-      gateType: payload.gateType,
-      submittedAt: payload.submittedAt,
-      source: "Quickfix Welding Landing Page",
-    }
-
-    let delivered = false
-
-    // Primary: server-side route (avoids CORS, returns GHL reference)
-    try {
-      const res = await fetch("/api/submit-lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      })
-      const data = await res.json().catch(() => null)
-      console.log("[v0] Submit lead API response:", res.status, data)
-
-      if (res.ok && data?.success) {
-        delivered = true
-        let ref: string | null = null
-        try {
-          const ghl = data.ghlResponse ? JSON.parse(data.ghlResponse) : null
-          ref = ghl?.id ?? null
-        } catch {
-          ref = null
-        }
-        setDeliveryRef(ref)
-      }
-    } catch (err) {
-      console.log("[v0] Submit lead server route error:", err)
-    }
-
-    // Fallback: fire the webhook directly from the browser (no-cors).
-    // Guarantees delivery even if the server route is unavailable.
-    if (!delivered) {
-      try {
-        await fetch(leadConnectorUrl, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(directPayload),
-        })
-        console.log("[v0] Submit lead delivered via direct fallback")
-        delivered = true
-      } catch (err) {
-        console.log("[v0] Submit lead direct fallback error:", err)
-      }
-    }
-
-    if (!delivered) {
-      setSubmitError(
-        "We couldn't submit your request just now. Please call or text us and we'll take care of you right away."
-      )
     }
 
     trackFBEvent("Lead", {
@@ -248,11 +180,6 @@ export function QuoteForm() {
             <p className="text-muted-foreground text-lg">
               We&apos;ve received your request and will contact you within 24 hours to discuss your project.
             </p>
-            {deliveryRef && (
-              <p className="text-muted-foreground/60 text-xs mt-4">
-                Reference: {deliveryRef}
-              </p>
-            )}
           </Card>
         </div>
       </section>
