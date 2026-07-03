@@ -124,6 +124,59 @@ export function QuoteForm() {
       submittedAt: new Date().toISOString(),
     }
 
+    const leadConnectorUrl =
+      "https://services.leadconnectorhq.com/hooks/XucZS735rmKlbQTCy59O/webhook-trigger/e0bb1155-91cc-4757-8f6b-22ef96c7cc83"
+
+    const nameParts = payload.name.trim().split(" ")
+    const directPayload = {
+      firstName: nameParts[0] || "",
+      lastName: nameParts.slice(1).join(" ") || "",
+      email: payload.email,
+      phone: payload.phone,
+      name: payload.name,
+      gateType: payload.gateType,
+      submittedAt: payload.submittedAt,
+      source: "Quickfix Welding Landing Page",
+    }
+
+    let delivered = false
+
+    // Primary: server-side route (avoids CORS)
+    try {
+      const res = await fetch("/api/submit-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+      const data = await res.json().catch(() => null)
+      if (res.ok && data?.success) {
+        delivered = true
+      }
+    } catch (err) {
+      console.log("[v0] Submit lead server route error:", err)
+    }
+
+    // Fallback: fire the webhook directly from the browser
+    if (!delivered) {
+      try {
+        await fetch(leadConnectorUrl, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(directPayload),
+        })
+        delivered = true
+      } catch (err) {
+        console.log("[v0] Submit lead direct fallback error:", err)
+      }
+    }
+
+    if (!delivered) {
+      setSubmitError(
+        "We couldn't submit your request just now. Please call or text us and we'll take care of you right away."
+      )
+    }
+
     trackFBEvent("Lead", {
       content_category: "Quote Request",
       content_name: payload.gateType,
