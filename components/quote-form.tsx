@@ -131,9 +131,11 @@ export function QuoteForm() {
     const directPayload = {
       firstName: nameParts[0] || "",
       lastName: nameParts.slice(1).join(" ") || "",
+      name: payload.name,
+      full_name: payload.name,
+      fullName: payload.name,
       email: payload.email,
       phone: payload.phone,
-      name: payload.name,
       gateType: payload.gateType,
       submittedAt: payload.submittedAt,
       source: "Quickfix Welding Landing Page",

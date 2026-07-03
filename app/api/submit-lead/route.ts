@@ -14,11 +14,15 @@ export async function POST(req: NextRequest) {
   const payload = {
     firstName,
     lastName,
+    // Full name provided under several common key variations so the GHL
+    // "Create/Update Contact" step can map to whichever field it expects.
+    name: body.name,
+    full_name: body.name,
+    fullName: body.name,
     email: body.email,
     phone: body.phone,
     gateType: body.gateType,
     submittedAt: body.submittedAt,
-    name: body.name,
     source: "Quickfix Welding Landing Page",
   }
 
