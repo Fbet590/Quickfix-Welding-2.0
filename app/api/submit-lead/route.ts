@@ -39,7 +39,11 @@ export async function POST(req: NextRequest) {
     console.log("[v0] LeadConnector status:", response.status)
     console.log("[v0] LeadConnector response:", responseText)
 
-    return NextResponse.json({ success: true, status: response.status })
+    return NextResponse.json({
+      success: response.ok,
+      status: response.status,
+      ghlResponse: responseText,
+    })
   } catch (err) {
     console.log("[v0] LeadConnector fetch error:", err)
     return NextResponse.json({ error: "Webhook delivery failed", detail: String(err) }, { status: 500 })
