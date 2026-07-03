@@ -6,6 +6,25 @@ export async function POST(req: NextRequest) {
   const leadConnectorUrl =
     "https://services.leadconnectorhq.com/hooks/XucZS735rmKlbQTCy59O/webhook-trigger/098f1338-837a-4232-a37b-ba5abd1fa2f0"
 
+  // Split name into first/last for GHL contact mapping
+  const nameParts = (body.name || "").trim().split(" ")
+  const firstName = nameParts[0] || ""
+  const lastName = nameParts.slice(1).join(" ") || ""
+
+  const payload = {
+    // Standard GHL field names
+    firstName,
+    lastName,
+    email: body.email,
+    phone: body.phone,
+    // Custom fields
+    gateType: body.gateType,
+    submittedAt: body.submittedAt,
+    // Full name as fallback
+    name: body.name,
+    source: "Quickfix Welding Landing Page",
+  }
+
   try {
     const response = await fetch(leadConnectorUrl, {
       method: "POST",
@@ -13,7 +32,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
         "Accept": "application/json",
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(payload),
     })
 
     const responseText = await response.text()
