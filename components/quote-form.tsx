@@ -96,13 +96,52 @@ export function QuoteForm() {
   const [errors, setErrors] = useState<{ email?: string; phone?: string }>({})
 
   const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRegex.test(email)
+    // Must match standard email format
+    const emailRegex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/
+    if (!emailRegex.test(email)) return false
+
+    const [local, domain] = email.toLowerCase().split("@")
+    const domainPart = domain?.split(".")[0] || ""
+
+    // Block obviously fake local parts
+    const fakeLocals = ["test", "fake", "asdf", "qwerty", "noreply", "no-reply", "none", "null", "admin", "user", "example", "temp", "trash", "junk", "spam", "abc", "xyz"]
+    if (fakeLocals.includes(local)) return false
+
+    // Block disposable / known throwaway domains
+    const fakeDomains = ["test", "fake", "example", "mailinator", "guerrillamail", "trashmail", "yopmail", "throwam", "sharklasers", "grr", "dispostable", "maildrop", "spamgourmet", "tempmail", "10minutemail", "mailnull", "spaml"]
+    if (fakeDomains.includes(domainPart)) return false
+
+    // Local part must be at least 2 chars
+    if (local.length < 2) return false
+
+    // TLD must be at least 2 chars
+    const tld = domain?.split(".").pop() || ""
+    if (tld.length < 2) return false
+
+    return true
   }
 
   const validatePhone = (phone: string): boolean => {
-    const cleaned = phone.replace(/\D/g, "")
-    return cleaned.length >= 10
+    const digits = phone.replace(/\D/g, "")
+
+    // Must be exactly 10 digits (US number)
+    if (digits.length !== 10) return false
+
+    // Area code cannot start with 0 or 1
+    if (digits[0] === "0" || digits[0] === "1") return false
+
+    // Block all-same-digit numbers (e.g. 1111111111, 0000000000)
+    if (/^(\d)\1{9}$/.test(digits)) return false
+
+    // Block sequential patterns (1234567890, 0987654321)
+    const sequential = "0123456789"
+    const reverseSequential = "9876543210"
+    if (sequential.includes(digits) || reverseSequential.includes(digits)) return false
+
+    // Block known fake numbers (555-0100 through 555-0199 are fictional)
+    if (digits.slice(3, 6) === "555" && digits[6] === "0") return false
+
+    return true
   }
 
   const handleNext = () => {
@@ -128,13 +167,8 @@ export function QuoteForm() {
     const leadConnectorUrl =
       "https://services.leadconnectorhq.com/hooks/XucZS735rmKlbQTCy59O/webhook-trigger/e0bb1155-91cc-4757-8f6b-22ef96c7cc83"
 
-    const nameParts = payload.name.trim().split(" ")
     const directPayload = {
-      firstName: nameParts[0] || "",
-      lastName: nameParts.slice(1).join(" ") || "",
-      name: payload.name,
       full_name: payload.name,
-      fullName: payload.name,
       email: payload.email,
       phone: payload.phone,
       gateType: payload.gateType,
@@ -213,8 +247,7 @@ export function QuoteForm() {
         if (formData.email === "") return false
         return validateEmail(formData.email)
       case 4:
-        const digits = formData.phone.replace(/\D/g, "")
-        return digits.length >= 7
+        return validatePhone(formData.phone)
       default:
         return true
     }
@@ -231,7 +264,10 @@ export function QuoteForm() {
 
   const handlePhoneChange = (value: string) => {
     setFormData({ ...formData, phone: value })
-    if (errors.phone) {
+    const digits = value.replace(/\D/g, "")
+    if (digits.length === 10 && !validatePhone(value)) {
+      setErrors({ ...errors, phone: "Please enter a valid US phone number" })
+    } else {
       setErrors({ ...errors, phone: undefined })
     }
   }
