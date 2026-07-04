@@ -29,28 +29,6 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Footer Info */}
-      <div className="py-12" style={{ backgroundColor: "#0D0D0D" }}>
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-            {/* Company Info */}
-            <div>
-              <div className="mb-4">
-                <span className="font-[family-name:var(--font-display)] text-xl font-bold tracking-tight text-card">
-                  Quickfix Welding
-                </span>
-              </div>
-              <p className="text-card/70 mb-4">
-                Florida&apos;s premier welding and metal fabrication company. Serving the greater Orlando area since 2009.
-              </p>
-              
-            </div>
-
-
-          </div>
-        </div>
-      </div>
-
       {/* Copyright */}
       <div className="py-6" style={{ backgroundColor: "#0D0D0D", borderTop: "1px solid #888" }}>
         <div className="container mx-auto px-4 text-center text-card/50 text-sm">
