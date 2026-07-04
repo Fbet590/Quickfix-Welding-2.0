@@ -14,11 +14,6 @@ const faqs = [
     answer: "Project timelines vary based on complexity and scope. Simple repairs might be completed in a day, while custom gates typically take 2-3 weeks. Structural projects may require 4-6 weeks. We'll provide a detailed timeline during your free consultation.",
   },
   {
-    question: "Do you offer financing or payment plans?",
-    answer: "Yes, we offer flexible financing options to accommodate your budget. We work with multiple lenders to find the best rates for qualified customers. Ask about our 0% interest options on qualifying projects.",
-  },
-  
-  {
     question: "Do I need a permit for my project?",
     answer: "Permit requirements depend on the project type and location. Many structural projects and large gates require permits. Don't worry — we handle all permit applications and inspections as part of our full-service approach.",
   },
