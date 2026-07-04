@@ -6,19 +6,8 @@ export async function POST(req: NextRequest) {
   const leadConnectorUrl =
     "https://services.leadconnectorhq.com/hooks/XucZS735rmKlbQTCy59O/webhook-trigger/e0bb1155-91cc-4757-8f6b-22ef96c7cc83"
 
-  // Split name into first/last for GHL contact mapping
-  const nameParts = (body.name || "").trim().split(" ")
-  const firstName = nameParts[0] || ""
-  const lastName = nameParts.slice(1).join(" ") || ""
-
   const payload = {
-    firstName,
-    lastName,
-    // Full name provided under several common key variations so the GHL
-    // "Create/Update Contact" step can map to whichever field it expects.
-    name: body.name,
     full_name: body.name,
-    fullName: body.name,
     email: body.email,
     phone: body.phone,
     gateType: body.gateType,

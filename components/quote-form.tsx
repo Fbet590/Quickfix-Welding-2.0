@@ -167,13 +167,8 @@ export function QuoteForm() {
     const leadConnectorUrl =
       "https://services.leadconnectorhq.com/hooks/XucZS735rmKlbQTCy59O/webhook-trigger/e0bb1155-91cc-4757-8f6b-22ef96c7cc83"
 
-    const nameParts = payload.name.trim().split(" ")
     const directPayload = {
-      firstName: nameParts[0] || "",
-      lastName: nameParts.slice(1).join(" ") || "",
-      name: payload.name,
       full_name: payload.name,
-      fullName: payload.name,
       email: payload.email,
       phone: payload.phone,
       gateType: payload.gateType,
