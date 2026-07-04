@@ -30,8 +30,6 @@ const galleryImages = [
   { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gemini_Generated_Image_9rgfhn9rgfhn9rgf.png-MEk6gAXJq2FvKcVYi3dscRtROndRid.jpeg", alt: "Arched side gate with vertical bars and diamond accents in matte black", category: "CUSTOM" },
   // Image 11 - SIMPLE
   { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gemini_Generated_Image_1mhhoa1mhhoa1mhh.png-ZFbv4Gssdx1icat7vHkIuipeaJ2iV2.jpeg", alt: "Double RV gate with natural wood panels and black metal frame", category: "SIMPLE" },
-  // Image 12 - CUSTOM
-  { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gemini_Generated_Image_stosdvstosdvstos.png-1OrwBaQhi2obK876zFbd6yfokgjYfE.jpeg", alt: "Modern geometric pattern double gate in matte black finish", category: "CUSTOM" },
   // Image 13 - SIMPLE
   { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gemini_Generated_Image_dghckrdghckrdghc.png-kmErIhS5NW7RpZ8auBQF5VdUrTwZw9.jpeg", alt: "Double RV gate with dark espresso wood panels and black frame", category: "SIMPLE" },
   // Image 14 - CUSTOM
@@ -50,16 +48,9 @@ const galleryImages = [
   { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gemini_Generated_Image_18126s18126s1812.png-GPn6juLuG4f2vwB51l37PgnG73zWjr.jpeg", alt: "Woven basket pattern side gate in matte black between cinder block walls", category: "CUSTOM" },
   // Image 21 - CUSTOM
   { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gemini_Generated_Image_4hdp6y4hdp6y4hdp.png-6juAHBs9TseYFwGySP1O7Gr7eToFwD.jpeg", alt: "Double entry gate with woven basket pattern between decorative breeze block walls", category: "CUSTOM" },
-  // Image 22 - CUSTOM
-  { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ChatGPT%20Image%20Mar%209%2C%202026%20at%2001_52_37%20PM-aWRLuabnOBIIhD4bbfMxL3d6fsNmZq.png", alt: "Modern black horizontal slat driveway gate", category: "CUSTOM" },
   // Image 23 - CUSTOM
   { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ChatGPT%20Image%20Mar%207%2C%202026%20at%2004_17_07%20PM-aZeg9U4erTLNWw0F6eobOcfCSO77Be.png", alt: "Black iron French doors with sunset reflection", category: "CUSTOM" },
-  // Image 24 - SIMPLE
-  { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ChatGPT%20Image%20Mar%209%2C%202026%20at%2001_54_37%20PM-Kv2FJDhHkCBOxQWSEry42h748XnzTj.png", alt: "Arched iron and wood pedestrian gate", category: "SIMPLE" },
-  // Image 25 - CUSTOM
-  { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ChatGPT%20Image%20Mar%207%2C%202026%20at%2003_20_37%20PM-3lsxD9B0cwxCEpEev534aleN7ABDAt.png", alt: "Black iron French doors on brick exterior", category: "CUSTOM" },
-  // Image 26 - SIMPLE
-  { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ChatGPT%20Image%20Mar%207%2C%202026%20at%2004_32_02%20PM-ovsNeVOfqrbsIaXNIjUQUVIfbRZfNP.png", alt: "Arched wood and iron driveway gate", category: "SIMPLE" },
+
   // Image 27 - CUSTOM
   { src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ChatGPT%20Image%20Mar%207%2C%202026%20at%2004_15_16%20PM-f8pgQhyWj4QRB1DjBUEW8FwcxS0q8J.png", alt: "Iron patio doors on Orlando home", category: "CUSTOM" },
   // Image 28 - CUSTOM

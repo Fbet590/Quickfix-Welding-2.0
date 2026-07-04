@@ -1,7 +1,6 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Clock } from "lucide-react"
 
 export function Footer() {
   const scrollToQuote = () => {
@@ -47,23 +46,7 @@ export function Footer() {
               
             </div>
 
-            
 
-            {/* Hours */}
-            <div>
-              <h4 className="font-semibold text-lg mb-4">Business Hours</h4>
-              <ul className="space-y-2 text-card/70">
-                <li className="flex items-center gap-3">
-                  <Clock className="w-4 h-4 text-primary" />
-                  <span>Monday – Friday: 5pm - 8pm</span>
-                </li>
-                <li className="pl-7">Saturday: 8am – 5pm</li>
-                <li className="pl-7">Sunday: 8am - 5pm</li>
-              </ul>
-              <p className="mt-4 text-sm text-card/60">
-                Emergency services available 24/7 for existing customers.
-              </p>
-            </div>
           </div>
         </div>
       </div>
