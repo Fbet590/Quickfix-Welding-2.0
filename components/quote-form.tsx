@@ -141,7 +141,26 @@ export function QuoteForm() {
     // Block known fake numbers (555-0100 through 555-0199 are fictional)
     if (digits.slice(3, 6) === "555" && digits[6] === "0") return false
 
+    // Block toll-free area codes (not mobile numbers)
+    const tollFreeAreaCodes = ["800", "833", "844", "855", "866", "877", "888", "900"]
+    if (tollFreeAreaCodes.includes(digits.slice(0, 3))) return false
+
+    // Block known landline-heavy area codes that are rarely mobile
+    // These are non-geographic / service numbers
+    const nonMobileAreaCodes = ["900", "976", "700", "710"]
+    if (nonMobileAreaCodes.includes(digits.slice(0, 3))) return false
+
     return true
+  }
+
+  const getPhoneError = (phone: string): string => {
+    const digits = phone.replace(/\D/g, "")
+    if (digits.length !== 10) return "Please enter a valid 10-digit US mobile number"
+    if (digits[0] === "0" || digits[0] === "1") return "Please enter a valid US mobile number"
+    const tollFreeAreaCodes = ["800", "833", "844", "855", "866", "877", "888", "900"]
+    if (tollFreeAreaCodes.includes(digits.slice(0, 3))) return "Toll-free numbers are not accepted — please enter your mobile number"
+    if (/^(\d)\1{9}$/.test(digits)) return "Please enter a valid US mobile number"
+    return "Please enter a valid US mobile number"
   }
 
   const handleNext = () => {
@@ -266,7 +285,7 @@ export function QuoteForm() {
     setFormData({ ...formData, phone: value })
     const digits = value.replace(/\D/g, "")
     if (digits.length === 10 && !validatePhone(value)) {
-      setErrors({ ...errors, phone: "Please enter a valid US phone number" })
+      setErrors({ ...errors, phone: getPhoneError(value) })
     } else {
       setErrors({ ...errors, phone: undefined })
     }
@@ -440,9 +459,10 @@ export function QuoteForm() {
           {/* Step 4: Phone */}
           {step === 4 && (
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-background text-center mb-4">
+              <h3 className="text-lg font-semibold text-background text-center mb-1">
                 Best phone number to reach you?
               </h3>
+              <p className="text-background/50 text-xs text-center mb-4">Mobile numbers only — we&apos;ll text you updates on your project</p>
               <div className="space-y-2">
                 <Input
                   type="tel"
